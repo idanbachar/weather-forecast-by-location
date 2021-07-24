@@ -4,10 +4,21 @@ import Col from 'react-bootstrap/Col';
 import ForcastCard from '../ForcastCard/ForcastCard';
 import Button from 'react-bootstrap/Button';
 
-export default function CityCardDetailed({ weatherData, handleAddFavorite }) {
+export default function CityCardDetailed({ weatherData, handleAddFavorite, handleRemoveFavorite }) {
 
     if (weatherData === undefined)
         return null;
+
+    function FavoriteButton() {
+        return (
+            <Button
+                variant={!weatherData.isFavorite ? 'success' : 'danger'}
+                onClick={!weatherData.isFavorite ? handleAddFavorite : handleRemoveFavorite}
+            >
+                {!weatherData.isFavorite ? "Add to favorites" : "Remove from favorites"}
+            </Button>
+        )
+    }
 
     return (
         <Card>
@@ -22,13 +33,14 @@ export default function CityCardDetailed({ weatherData, handleAddFavorite }) {
                     <h1>{weatherData.weather_text}</h1>
                 </Card.Text>
                 <Card.Text>
-                    <Button onClick={handleAddFavorite}>Add to favorites</Button>
+                    <FavoriteButton />
                 </Card.Text>
 
                 <Row xs={1} md={5} className="g-5">
-                    {weatherData.five_days_daily_forcasts.map(forcast => (
+                    {weatherData.five_days_daily_forcasts.map((forcast, index) => (
                         <Col>
                             <ForcastCard
+                                key={index}
                                 date={forcast.Date}
                                 temperature={forcast.Temperature}
                             />

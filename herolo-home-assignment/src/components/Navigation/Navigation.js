@@ -7,10 +7,11 @@ export default function Navigation({ title, links }) {
     return (
         <Navbar bg="dark" variant="dark">
             <Container>
-                <Navbar.Brand href="#home">{title}</Navbar.Brand>
+                <Navbar.Brand>{title}</Navbar.Brand>
                 <Nav className="me-auto">
-                    {links.map(link =>
+                    {links.map((link, index) =>
                         <NavLink
+                            key={link + index}
                             to={link.to}
                             activeStyle={{
                                 fontWeight: "bold",

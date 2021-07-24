@@ -1,19 +1,33 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import InputGroup from 'react-bootstrap/InputGroup';
 import FormControl from 'react-bootstrap/FormControl';
 import Button from 'react-bootstrap/Button';
 import CityCardDetailed from "../components/CityCardDetailed/CityCardDetailed";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
 
 export default function WeatherPage() {
-
-    const apikey = "ykJesbBYhlBBwJJhnr3H56cgFBr6vB4M";
+    
+    const apikey = "3DaPAiGhzL0rLrdbGQsu334dZxEXIGiX";
     const accuweather_url = "http://dataservice.accuweather.com";
+
+    const params = useParams();
+    const dispatch = useDispatch();
+    const favorites = useSelector(state => state.favoriteCities);
 
     const [citySearch, setCitySearch] = useState('Tel Aviv');
     const [currentCityData, setCurrentCityData] = useState();
 
-    const dispatch = useDispatch();
+    useEffect(() => {
+        if (favorites.length > 0 && params.cityId) {
+            const cityWeather = favorites.find(fav => fav.id === params.cityId);
+            if (cityWeather) {
+                setCitySearch(cityWeather.name);
+                setCurrentCityData(cityWeather);
+            }
+        }
+
+    }, [favorites, currentCityData])
 
     const getCity = async () => {
         const res = await fetch(`${accuweather_url}/locations/v1/cities/autocomplete?apikey=${apikey}&q=${citySearch}`);
@@ -32,39 +46,47 @@ export default function WeatherPage() {
 
     const getCityWeather = async () => {
 
-        const city = await getCity();
-
-        if (city.length > 0) {
-
+        try {
+            const city = await getCity();
             const cityKey = city[0].Key;
             const currentWeather = await getCurrentWeather(cityKey);
+            const fiveDaysDailyForcasts = await getFiveDaysForcasts(cityKey);
 
-            if (currentWeather.length > 0) {
-
-                const fiveDaysDailyForcasts = await getFiveDaysForcasts(cityKey);
-                if (fiveDaysDailyForcasts !== undefined) {
-                    setCurrentCityData({
-                        id: city[0].Key,
-                        name: city[0].LocalizedName,
-                        weather_text: currentWeather[0].WeatherText,
-                        five_days_daily_forcasts: fiveDaysDailyForcasts.DailyForecasts,
-                        date: currentWeather[0].LocalObservationDateTime,
-                        temperature_c: currentWeather[0].Temperature.Metric.Value,
-                        temperature_f: currentWeather[0].Temperature.Imperial.Value
-                    });
-                }
-            }
+            setCurrentCityData({
+                id: city[0].Key,
+                name: city[0].LocalizedName,
+                weather_text: currentWeather[0].WeatherText,
+                five_days_daily_forcasts: fiveDaysDailyForcasts.DailyForecasts,
+                date: currentWeather[0].LocalObservationDateTime,
+                temperature_c: currentWeather[0].Temperature.Metric.Value,
+                temperature_f: currentWeather[0].Temperature.Imperial.Value,
+                isFavorite: false
+            });
+        }
+        catch (error) {
+            alert(error);
         }
     }
 
-    const addToFavorite = (favoriteCity) => {
-
+    const addToFavorites = (city) => {
         dispatch({
             type: 'ADD',
-            payload: favoriteCity
+            payload: city
         });
 
-        console.log(`The city ${favoriteCity.name} has been added to favorites.`);
+        city.isFavorite = true;
+        setCurrentCityData(city);
+    }
+
+    const removeFromFavorites = (city) => {
+
+        city.isFavorite = false;
+        setCurrentCityData(city);
+
+        dispatch({
+            type: 'REMOVE',
+            payload: city.id
+        });
     }
 
     return (
@@ -87,8 +109,9 @@ export default function WeatherPage() {
 
             <CityCardDetailed
                 weatherData={currentCityData}
-                handleAddFavorite={() => addToFavorite(currentCityData)} />
-
+                handleAddFavorite={() => addToFavorites(currentCityData)}
+                handleRemoveFavorite={() => removeFromFavorites(currentCityData)}
+            />
         </div>
     )
 }
