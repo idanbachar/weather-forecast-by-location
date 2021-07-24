@@ -1,6 +1,6 @@
 const initialState = [];
 
-const FavoriteCitiesReducer = (state = initialState, action) => {
+const FavoriteLocationsReducer = (state = initialState, action) => {
     switch (action.type) {
         case 'ADD':
             action.payload.isFavorite = true;
@@ -14,4 +14,4 @@ const FavoriteCitiesReducer = (state = initialState, action) => {
     }
 };
 
-export default FavoriteCitiesReducer;
+export default FavoriteLocationsReducer;

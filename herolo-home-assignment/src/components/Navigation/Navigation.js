@@ -4,24 +4,23 @@ import Container from 'react-bootstrap/Container';
 import { NavLink } from 'react-router-dom';
 
 export default function Navigation({ title, links }) {
+
     return (
         <Navbar bg="dark" variant="dark">
             <Container>
                 <Navbar.Brand>{title}</Navbar.Brand>
-                <Nav className="me-auto">
+                <Nav>
                     {links.map((link, index) =>
                         <NavLink
-                            key={link + index}
+                            className="inactive"
+                            activeClassName="active"
+                            key={index}
                             to={link.to}
-                            activeStyle={{
-                                fontWeight: "bold",
-                                textDecoration: "none",
-                                color: "lightgray",
-                                paddingLeft: "15px",
-                                paddingRight: "15px"
-                            }}>
+                        >
                             {link.label}
-                        </NavLink>)}
+                        </NavLink>
+
+                    )}
                 </Nav>
             </Container>
         </Navbar>

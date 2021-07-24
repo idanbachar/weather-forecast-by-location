@@ -1,10 +1,10 @@
 import Card from 'react-bootstrap/Card';
 import { Link } from 'react-router-dom';
 
-export default function FavoriteCityCard({ weatherData }) {
+export default function FavoriteLocationCard({ weatherData }) {
     return (
         <>
-            <Link to={`/city/${weatherData.id}`} style={{ textDecoration: 'none' }}>
+            <Link to={`/location/${weatherData.id}`} style={{ textDecoration: 'none' }}>
                 <Card>
                     <Card.Header>
                         {weatherData.name}

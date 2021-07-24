@@ -1,8 +1,8 @@
 import { combineReducers } from "redux";
-import FavoriteCitiesReducer from "./FavoriteCitiesReducer";
+import FavoriteLocationsReducer from "./FavoriteLocationsReducer";
 
 const AllReducers = combineReducers({
-    favoriteCities: FavoriteCitiesReducer
+    favoriteLocations: FavoriteLocationsReducer
 });
 
 export default AllReducers;

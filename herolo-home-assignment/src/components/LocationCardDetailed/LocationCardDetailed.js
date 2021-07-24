@@ -4,7 +4,7 @@ import Col from 'react-bootstrap/Col';
 import ForcastCard from '../ForcastCard/ForcastCard';
 import Button from 'react-bootstrap/Button';
 
-export default function CityCardDetailed({ weatherData, handleFavorite }) {
+export default function LocationCardDetailed({ weatherData, handleFavorite }) {
 
     if (weatherData === undefined)
         return null;

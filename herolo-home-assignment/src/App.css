@@ -12,4 +12,14 @@
   font-size: calc(10px + 2vmin);
   color: white;
 }
+
+.inactive {
+  color: #fff;
+  text-decoration: none;
+}
+
+.inactive:hover {
+  color: #fed136;
+}
+
  

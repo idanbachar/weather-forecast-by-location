@@ -22,7 +22,7 @@ function App() {
 
       <Switch>
         <Route exact path="/" component={WeatherPage} />
-        <Route exact path="/city/:cityId?" component={WeatherPage} />
+        <Route exact path="/location/:locationId?" component={WeatherPage} />
         <Route exact path="/favorites" component={FavoritesPage} />
       </Switch>
 

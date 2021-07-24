@@ -2,42 +2,42 @@ import { useEffect, useState } from "react"
 import InputGroup from 'react-bootstrap/InputGroup';
 import FormControl from 'react-bootstrap/FormControl';
 import Button from 'react-bootstrap/Button';
-import CityCardDetailed from "../components/CityCardDetailed/CityCardDetailed";
+import LocationCardDetailed from "../components/LocationCardDetailed/LocationCardDetailed";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 
 export default function WeatherPage() {
 
-    const apikey = "3DaPAiGhzL0rLrdbGQsu334dZxEXIGiX";
+    const apikey = "p2fWGa1zwDwGDvVfIQl383p0Joc33tQL";
     const accuweather_url = "http://dataservice.accuweather.com";
 
     const params = useParams();
     const dispatch = useDispatch();
-    const favorites = useSelector(state => state.favoriteCities);
+    const favorites = useSelector(state => state.favoriteLocations);
 
     const [citySearch, setCitySearch] = useState('Tel Aviv');
-    const [currentCityData, setCurrentCityData] = useState();
+    const [currentLocationData, setCurrentLocationData] = useState();
 
     useEffect(() => {
         if (favorites.length > 0) {
 
-            if (params.cityId) {
-                const cityWeather = favorites.find(fav => fav.id === params.cityId);
-                if (cityWeather) {
-                    setCitySearch(cityWeather.name);
-                    setCurrentCityData(cityWeather);
+            if (params.locationId) {
+                const locationWeather = favorites.find(fav => fav.id === params.locationId);
+                if (locationWeather) {
+                    setCitySearch(locationWeather.name);
+                    setCurrentLocationData(locationWeather);
                 }
             }
             else {
-                if (currentCityData) {
-                    const cityWeather = favorites.find(fav => fav.id === currentCityData.id);
-                    if (cityWeather)
-                        setCurrentCityData(cityWeather);
+                if (currentLocationData) {
+                    const locationWeather = favorites.find(fav => fav.id === currentLocationData.id);
+                    if (locationWeather)
+                        setCurrentLocationData(locationWeather);
                 }
             }
         }
 
-    }, [currentCityData, dispatch])
+    }, [currentLocationData])
 
     const getCity = async () => {
         const res = await fetch(`${accuweather_url}/locations/v1/cities/autocomplete?apikey=${apikey}&q=${citySearch}`);
@@ -54,7 +54,7 @@ export default function WeatherPage() {
         return await res.json();
     }
 
-    const getCityWeather = async () => {
+    const getLocationWeather = async () => {
 
         try {
             const city = await getCity();
@@ -62,7 +62,7 @@ export default function WeatherPage() {
             const currentWeather = await getCurrentWeather(cityKey);
             const fiveDaysDailyForcasts = await getFiveDaysForcasts(cityKey);
 
-            setCurrentCityData({
+            setCurrentLocationData({
                 id: city[0].Key,
                 name: city[0].LocalizedName,
                 weather_text: currentWeather[0].WeatherText,
@@ -84,10 +84,10 @@ export default function WeatherPage() {
 
         switch (type) {
             case "ADD":
-                payload = currentCityData;
+                payload = currentLocationData;
                 break;
             case "REMOVE":
-                payload = currentCityData.id;
+                payload = currentLocationData.id;
                 break;
             default:
                 break;
@@ -99,9 +99,9 @@ export default function WeatherPage() {
         });
 
 
-        const updated = { ...currentCityData };
+        const updated = { ...currentLocationData };
         updated.isFavorite = type === 'ADD';
-        setCurrentCityData(updated);
+        setCurrentLocationData(updated);
 
 
     }
@@ -118,13 +118,13 @@ export default function WeatherPage() {
                 />
                 <Button
                     variant="outline-secondary"
-                    onClick={getCityWeather}
+                    onClick={getLocationWeather}
                 >
                     Search
                 </Button>
             </InputGroup>
-            <CityCardDetailed
-                weatherData={currentCityData}
+            <LocationCardDetailed
+                weatherData={currentLocationData}
                 handleFavorite={handleFavorite}
             />
         </div>
