@@ -1,10 +1,26 @@
+
 import './App.css';
+import Navigation from './components/Navigation/Navigation';
 
 function App() {
+
+  const navLinks = [
+    {
+      label: "Home",
+      to: "/"
+    },
+    {
+      label: "Favorites",
+      to: "/favorites"
+    }
+  ]
+
+
   return (
     <div className="App">
-      <header className="App-header">
-      </header>
+      <Navigation
+        links={navLinks}
+      />
     </div>
   );
 }
