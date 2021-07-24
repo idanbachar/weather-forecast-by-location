@@ -1,16 +1,18 @@
 import Card from 'react-bootstrap/Card';
 
-export default function ForcastCard({ date, temperature }) {
+export default function FavoriteCityCard({ weatherData }) {
     return (
         <Card>
+            <Card.Header>
+                {weatherData.name}
+            </Card.Header>
             <Card.Img variant="top" src="https://images.fineartamerica.com/images/artworkimages/mediumlarge/2/sun-in-blue-sky-with-clouds-tomch.jpg" />
             <Card.Body>
-                <Card.Title>{new Date(date).toDateString()}</Card.Title>
                 <Card.Text>
-                    Minimum: {temperature.Minimum.Value} {temperature.Maximum.Unit}
+                    {weatherData.weather_text}
                 </Card.Text>
                 <Card.Text>
-                    Maximum {temperature.Maximum.Value} {temperature.Maximum.Unit}
+                    {weatherData.temperature_c} C
                 </Card.Text>
             </Card.Body>
         </Card>

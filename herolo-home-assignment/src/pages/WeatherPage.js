@@ -1,20 +1,19 @@
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import InputGroup from 'react-bootstrap/InputGroup';
 import FormControl from 'react-bootstrap/FormControl';
 import Button from 'react-bootstrap/Button';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col'
-import ForcastCard from "../components/ForcastCard/ForcastCard";
+import CityCardDetailed from "../components/CityCardDetailed/CityCardDetailed";
+import { useDispatch } from "react-redux";
 
 export default function WeatherPage() {
 
     const apikey = "ykJesbBYhlBBwJJhnr3H56cgFBr6vB4M";
     const accuweather_url = "http://dataservice.accuweather.com";
 
-    const [citySearch, setCitySearch] = useState('');
-    const [currentCity, setCurrentCity] = useState();
-    const [currentCityWeather, setCurrentCityWeather] = useState();
-    const [fiveDaysForcasts, setFiveDaysForcasts] = useState([]);
+    const [citySearch, setCitySearch] = useState('Tel Aviv');
+    const [currentCityData, setCurrentCityData] = useState();
+
+    const dispatch = useDispatch();
 
     const getCity = async () => {
         const res = await fetch(`${accuweather_url}/locations/v1/cities/autocomplete?apikey=${apikey}&q=${citySearch}`);
@@ -36,23 +35,41 @@ export default function WeatherPage() {
         const city = await getCity();
 
         if (city.length > 0) {
-            setCurrentCity(city[0]);
 
             const cityKey = city[0].Key;
             const currentWeather = await getCurrentWeather(cityKey);
 
             if (currentWeather.length > 0) {
-                setCurrentCityWeather(currentWeather[0]);
 
                 const fiveDaysDailyForcasts = await getFiveDaysForcasts(cityKey);
-                if (fiveDaysDailyForcasts !== undefined)
-                    setFiveDaysForcasts(fiveDaysDailyForcasts.DailyForecasts);
+                if (fiveDaysDailyForcasts !== undefined) {
+                    setCurrentCityData({
+                        id: city[0].Key,
+                        name: city[0].LocalizedName,
+                        weather_text: currentWeather[0].WeatherText,
+                        five_days_daily_forcasts: fiveDaysDailyForcasts.DailyForecasts,
+                        date: currentWeather[0].LocalObservationDateTime,
+                        temperature_c: currentWeather[0].Temperature.Metric.Value,
+                        temperature_f: currentWeather[0].Temperature.Imperial.Value
+                    });
+                }
             }
         }
     }
 
+    const addToFavorite = (favoriteCity) => {
+
+        dispatch({
+            type: 'ADD',
+            payload: favoriteCity
+        });
+
+        console.log(`The city ${favoriteCity.name} has been added to favorites.`);
+    }
+
     return (
         <div className="container">
+            <h1>City Weather</h1>
             <InputGroup className="mb-3">
                 <FormControl
                     aria-label="Search City"
@@ -68,21 +85,10 @@ export default function WeatherPage() {
                 </Button>
             </InputGroup>
 
-            <br />
-            {currentCityWeather !== undefined ?
-                <h1>{currentCity.LocalizedName} {currentCityWeather.Temperature.Metric.Value}</h1>
-                : null}
+            <CityCardDetailed
+                weatherData={currentCityData}
+                handleAddFavorite={() => addToFavorite(currentCityData)} />
 
-            <Row xs={1} md={5} className="g-5">
-                {fiveDaysForcasts.map(forcast => (
-                    <Col>
-                        <ForcastCard
-                            date={forcast.Date}
-                            temperature={forcast.Temperature}
-                        />
-                    </Col>
-                ))}
-            </Row>
         </div>
     )
 }

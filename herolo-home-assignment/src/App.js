@@ -6,8 +6,6 @@ import FavoritesPage from './pages/FavoritesPage';
 
 function App() {
 
-  const apikey = "ykJesbBYhlBBwJJhnr3H56cgFBr6vB4M";
-
   const title = "Herolo Weather Task";
 
   const navLinks = [
