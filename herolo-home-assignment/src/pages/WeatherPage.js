@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 
 export default function WeatherPage() {
-    
+
     const apikey = "3DaPAiGhzL0rLrdbGQsu334dZxEXIGiX";
     const accuweather_url = "http://dataservice.accuweather.com";
 
@@ -19,15 +19,25 @@ export default function WeatherPage() {
     const [currentCityData, setCurrentCityData] = useState();
 
     useEffect(() => {
-        if (favorites.length > 0 && params.cityId) {
-            const cityWeather = favorites.find(fav => fav.id === params.cityId);
-            if (cityWeather) {
-                setCitySearch(cityWeather.name);
-                setCurrentCityData(cityWeather);
+        if (favorites.length > 0) {
+
+            if (params.cityId) {
+                const cityWeather = favorites.find(fav => fav.id === params.cityId);
+                if (cityWeather) {
+                    setCitySearch(cityWeather.name);
+                    setCurrentCityData(cityWeather);
+                }
+            }
+            else {
+                if (currentCityData) {
+                    const cityWeather = favorites.find(fav => fav.id === currentCityData.id);
+                    if (cityWeather)
+                        setCurrentCityData(cityWeather);
+                }
             }
         }
 
-    }, [favorites, currentCityData])
+    }, [currentCityData, dispatch])
 
     const getCity = async () => {
         const res = await fetch(`${accuweather_url}/locations/v1/cities/autocomplete?apikey=${apikey}&q=${citySearch}`);
@@ -68,25 +78,32 @@ export default function WeatherPage() {
         }
     }
 
-    const addToFavorites = (city) => {
+    const handleFavorite = (type) => {
+
+        let payload;
+
+        switch (type) {
+            case "ADD":
+                payload = currentCityData;
+                break;
+            case "REMOVE":
+                payload = currentCityData.id;
+                break;
+            default:
+                break;
+        }
+
         dispatch({
-            type: 'ADD',
-            payload: city
+            type: type,
+            payload: payload
         });
 
-        city.isFavorite = true;
-        setCurrentCityData(city);
-    }
 
-    const removeFromFavorites = (city) => {
+        const updated = { ...currentCityData };
+        updated.isFavorite = type === 'ADD';
+        setCurrentCityData(updated);
 
-        city.isFavorite = false;
-        setCurrentCityData(city);
 
-        dispatch({
-            type: 'REMOVE',
-            payload: city.id
-        });
     }
 
     return (
@@ -106,11 +123,9 @@ export default function WeatherPage() {
                     Search
                 </Button>
             </InputGroup>
-
             <CityCardDetailed
                 weatherData={currentCityData}
-                handleAddFavorite={() => addToFavorites(currentCityData)}
-                handleRemoveFavorite={() => removeFromFavorites(currentCityData)}
+                handleFavorite={handleFavorite}
             />
         </div>
     )

@@ -11,8 +11,8 @@ export default function FavoritesPage() {
         <div className="container">
             <h1>My Favorite Cities</h1>
             <Row xs={1} md={5} className="g-5">
-                {favoriteCities.map(weatherData =>
-                    <Col>
+                {favoriteCities.map((weatherData, index) =>
+                    <Col key={index}>
                         <FavoriteCityCard
                             weatherData={weatherData} />
                     </Col>
