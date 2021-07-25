@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 
 export default function WeatherPage() {
-    const apikey = "jrwI4R18XBGNPqsyfPE9dOJoGCebvwpT";
+    const apikey = "OANaWZsJN5vVD3hoazGRaaG35oASnNGQ";
     const accuweather_url = "http://dataservice.accuweather.com";
 
     const params = useParams();

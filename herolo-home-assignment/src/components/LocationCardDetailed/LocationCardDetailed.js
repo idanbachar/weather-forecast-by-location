@@ -1,9 +1,9 @@
 import Card from 'react-bootstrap/Card';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import ForcastCard from '../ForcastCard/ForcastCard';
 import Button from 'react-bootstrap/Button';
 import { useSelector } from 'react-redux';
+import WeatherCard from '../WeatherCard/WeatherCard';
 
 export default function LocationCardDetailed({ weatherData, handleFavorite }) {
     const temperatureUnit = useSelector(state => state.forcastUnit);
@@ -47,10 +47,11 @@ export default function LocationCardDetailed({ weatherData, handleFavorite }) {
                 <Row xs={1} md={5} className="g-5">
                     {forcastsByUnit.map((forcast, index) => (
                         <Col key={index}>
-                            <ForcastCard
-                                date={forcast.Date}
-                                temperature={forcast.Temperature}
-                                weatherText={weatherData.weather_text}
+                            <WeatherCard
+                                title={new Date(forcast.Date).toDateString()}
+                                imageText={weatherData.weather_text}
+                                smallLabel={`${Math.round(forcast.Temperature.Minimum.Value)}°${forcast.Temperature.Minimum.Unit}`}
+                                bigLabel={`${Math.round(forcast.Temperature.Maximum.Value)}°${forcast.Temperature.Maximum.Unit}`}
                             />
                         </Col>
                     ))}
