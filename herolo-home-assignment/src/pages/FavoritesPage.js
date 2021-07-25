@@ -4,12 +4,10 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
 export default function FavoritesPage() {
-
     const favoriteLocations = useSelector(state => state.favoriteLocations);
-
     return (
         <div className="container">
-            <h1>My Favorite locations</h1>
+            <h3>My Favorite locations</h3>
             <Row xs={1} md={5} className="g-5">
                 {favoriteLocations.map((weatherData, index) =>
                     <Col key={index}>

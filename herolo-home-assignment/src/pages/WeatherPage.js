@@ -7,22 +7,18 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 
 export default function WeatherPage() {
-
-    const apikey = "0zwcxsiiWksGhoR0QoQg1yd5KExpmxv8";
+    const apikey = "A3JChyoOjXYJkQAoyMGcdaEnAgl9uVlf";
     const accuweather_url = "http://dataservice.accuweather.com";
 
     const params = useParams();
     const dispatch = useDispatch();
-    const favorites = useSelector(state => state.favoriteLocations);
 
+    const favorites = useSelector(state => state.favoriteLocations);
     const [citySearch, setCitySearch] = useState('');
     const [currentLocationData, setCurrentLocationData] = useState();
 
     useEffect(() => {
-
-
         if (favorites.length > 0) {
-
             if (params.locationId) {
                 const locationWeather = favorites.find(fav => fav.id === params.locationId);
                 if (locationWeather) {
@@ -61,14 +57,12 @@ export default function WeatherPage() {
     }
 
     const getFiveDaysForcasts = async (cityKey, temperatureUnit) => {
-
         let metric = temperatureUnit === 'celsius';
         const res = await fetch(`${accuweather_url}/forecasts/v1/daily/5day/${cityKey}?apikey=${apikey}&metric=${metric}`);
         return await res.json();
     }
 
     const getGeoLocation = () => {
-
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(setGeoLocationCoordinates);
 
@@ -79,7 +73,6 @@ export default function WeatherPage() {
     }
 
     async function setGeoLocationCoordinates(position) {
-
         const coordinates = {
             latitude: position.coords.latitude,
             longitude: position.coords.longitude
@@ -92,7 +85,6 @@ export default function WeatherPage() {
     }
 
     const getLocationWeather = async (cityName) => {
-
         try {
             const city = await getCity(cityName);
             const cityKey = city[0].Key;
@@ -118,7 +110,6 @@ export default function WeatherPage() {
     }
 
     const handleFavorite = (type) => {
-
         let payload;
 
         switch (type) {
@@ -137,17 +128,14 @@ export default function WeatherPage() {
             payload: payload
         });
 
-
         const updated = { ...currentLocationData };
         updated.isFavorite = type === 'ADD';
         setCurrentLocationData(updated);
-
-
     }
 
     return (
         <div className="container">
-            <h1>City Weather</h1>
+            <h3>City Weather</h3>
             <InputGroup className="mb-3">
                 <FormControl
                     aria-label="Search City"

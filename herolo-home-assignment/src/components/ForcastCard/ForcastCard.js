@@ -2,7 +2,6 @@ import Card from 'react-bootstrap/Card';
 import { useSelector } from 'react-redux';
 
 export default function ForcastCard({ date, temperature }) {
-
     const themeColor = useSelector(state => state.themeColor);
     const getOppositeTheme = () => themeColor === 'light' ? 'dark' : 'light';
 

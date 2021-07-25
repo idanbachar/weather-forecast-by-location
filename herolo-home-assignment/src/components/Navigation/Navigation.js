@@ -5,11 +5,9 @@ import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 export default function Navigation({ title, links }) {
-
     const themeColor = useSelector(state => state.themeColor);
 
     return (
-
         <Navbar collapseOnSelect expand="lg" bg={themeColor} variant={themeColor}>
             <Container>
                 <Navbar.Brand>{title}</Navbar.Brand>
@@ -26,11 +24,9 @@ export default function Navigation({ title, links }) {
                                 {link.label}
                             </Link>
                         )}
-
                     </Nav>
                 </Navbar.Collapse>
             </Container>
         </Navbar >
-
     )
 }

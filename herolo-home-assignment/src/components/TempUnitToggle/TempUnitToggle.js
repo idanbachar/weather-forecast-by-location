@@ -4,11 +4,8 @@ import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 export default function TempUnitToggle() {
-
     const dispatch = useDispatch();
-
-    const [checked, setChecked] = useState(true);
-    const [radioValue, setRadioValue] = useState('C');
+    const [tempUnit, setTempUnit] = useState('C');
 
     const units = [
         { name: '°C', value: 'C' },
@@ -16,17 +13,20 @@ export default function TempUnitToggle() {
     ];
 
     const changeForcastUnit = (event) => {
-
         dispatch({
             type: 'UPDATE',
             payload: event.currentTarget.value
         })
-
-        setRadioValue(event.currentTarget.value);
+        setTempUnit(event.currentTarget.value);
     }
 
     return (
         <ButtonGroup>
+            <span style={{
+                marginRight: '10px'
+            }}>
+                Temp:
+            </span>
             {units.map((unit, index) => (
                 <ToggleButton
                     key={index}
@@ -35,7 +35,7 @@ export default function TempUnitToggle() {
                     variant={unit.value === "C" ? 'outline-success' : 'outline-danger'}
                     name="radio"
                     value={unit.value}
-                    checked={radioValue === unit.value}
+                    checked={tempUnit === unit.value}
                     onChange={(e) => changeForcastUnit(e)}
                 >
                     {unit.name}

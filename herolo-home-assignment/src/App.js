@@ -7,7 +7,6 @@ import TempUnitToggle from './components/TempUnitToggle/TempUnitToggle';
 import ThemeToggle from './components/ThemeToggle/ThemeToggle';
 
 function App() {
-
   const title = "Herolo Weather Task";
 
   const navLinks = [
@@ -36,7 +35,6 @@ function App() {
         <Route exact path="/location/:locationId?" component={WeatherPage} />
         <Route exact path="/favorites" component={FavoritesPage} />
       </Switch>
-
     </div >
   );
 }
