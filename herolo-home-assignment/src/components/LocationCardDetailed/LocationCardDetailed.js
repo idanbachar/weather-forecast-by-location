@@ -8,16 +8,13 @@ import { useSelector } from 'react-redux';
 export default function LocationCardDetailed({ weatherData, handleFavorite }) {
 
     const temperature_unit = useSelector(state => state.forcastUnit) || 'C';
+    const themeColor = useSelector(state => state.themeColor) || 'L';
+
     if (weatherData === undefined)
         return null;
 
-    const forcasts_by_unit = temperature_unit === 'C' ?
-        weatherData.five_days_daily_forcasts_c :
-        weatherData.five_days_daily_forcasts_f;
-
-    const current_temp_by_unit = temperature_unit === 'C' ?
-        weatherData.temperature_c :
-        weatherData.temperature_f
+    const forcasts_by_unit = temperature_unit === 'C' ? weatherData.five_days_daily_forcasts_c : weatherData.five_days_daily_forcasts_f;
+    const current_temp_by_unit = temperature_unit === 'C' ? weatherData.temperature_c : weatherData.temperature_f;
 
     function FavoriteButton() {
         return (
@@ -31,7 +28,10 @@ export default function LocationCardDetailed({ weatherData, handleFavorite }) {
     }
 
     return (
-        <Card>
+        <Card
+            bg={themeColor === 'L' ? 'light' : 'dark'}
+            text={themeColor === 'L' ? 'dark' : 'light'}
+        >
             <Card.Body>
                 <h1>{weatherData.name}</h1>
                 <h2>{Math.round(current_temp_by_unit)}°{temperature_unit}</h2>
