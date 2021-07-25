@@ -16,10 +16,12 @@ export default function ForcastCard({ date, temperature, weatherText }) {
             return clearWeatherImg;
         else if (weatherText === "Mostly Clear")
             return mostlyClearWeatherImg;
-        else if (weatherText === "Cloudy")
+        else if (weatherText === "Cloudy" || weatherText === "Mostly cloudy")
             return cloudyWeatherImg;
         else if (weatherText === "Sunny" || weatherText === "Clouds and sun")
             return sunnyWeatherImg;
+            else if (weatherText === "Light rain" || weatherText === "Heavy rain")
+            return rainWeatherImg;
 
         return sunnyWeatherImg;
     }

@@ -19,12 +19,14 @@ export default function FavoriteLocationCard({ weatherData }) {
             return clearWeatherImg;
         else if (weatherData.weather_text === "Mostly Clear")
             return mostlyClearWeatherImg;
-        else if (weatherData.weather_text === "Cloudy")
+        else if (weatherData.weather_text === "Cloudy" || weatherData.weather_text === "Mostly cloudy")
             return cloudyWeatherImg;
         else if (weatherData.weather_text === "Sunny" || weatherData.weather_text === "Clouds and sun")
             return sunnyWeatherImg;
+        else if (weatherData.weather_text === "Light rain" || weatherData.weather_text === "Heavy rain")
+            return rainWeatherImg;
 
-        return sunnyWeatherImg;
+            return sunnyWeatherImg;
     }
 
     let currentImage = getCurrentWeatherImage();
