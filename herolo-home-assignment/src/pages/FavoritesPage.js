@@ -8,6 +8,7 @@ export default function FavoritesPage() {
     return (
         <div className="container">
             <h3>My Favorite locations</h3>
+            <hr />
             <Row xs={1} md={5} className="g-5">
                 {favoriteLocations.map((weatherData, index) =>
                     <Col key={index}>

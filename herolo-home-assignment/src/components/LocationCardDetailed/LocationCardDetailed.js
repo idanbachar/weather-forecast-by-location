@@ -30,7 +30,6 @@ export default function LocationCardDetailed({ weatherData, handleFavorite }) {
         <Card
             bg={themeColor}
             text={themeColor === 'light' ? 'dark' : 'light'}
-
         >
             <Card.Body >
                 <div style={{
@@ -51,6 +50,7 @@ export default function LocationCardDetailed({ weatherData, handleFavorite }) {
                             <ForcastCard
                                 date={forcast.Date}
                                 temperature={forcast.Temperature}
+                                weatherText={weatherData.weather_text}
                             />
                         </Col>
                     ))}

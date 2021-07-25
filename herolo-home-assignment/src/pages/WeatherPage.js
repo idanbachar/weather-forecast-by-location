@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 
 export default function WeatherPage() {
-    const apikey = "A3JChyoOjXYJkQAoyMGcdaEnAgl9uVlf";
+    const apikey = "jrwI4R18XBGNPqsyfPE9dOJoGCebvwpT";
     const accuweather_url = "http://dataservice.accuweather.com";
 
     const params = useParams();
@@ -136,6 +136,7 @@ export default function WeatherPage() {
     return (
         <div className="container">
             <h3>City Weather</h3>
+            <hr />
             <InputGroup className="mb-3">
                 <FormControl
                     aria-label="Search City"
