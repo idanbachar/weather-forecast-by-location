@@ -8,21 +8,21 @@ export default function ThemeToggle() {
     const dispatch = useDispatch();
 
     const [checked, setChecked] = useState(true);
-    const [radioValue, setRadioValue] = useState('L');
+    const [radioValue, setRadioValue] = useState('light');
 
     const themes = [
-        { name: 'Light', value: 'L' },
-        { name: 'Dark', value: 'D' },
+        { name: 'Light', value: 'light' },
+        { name: 'Dark', value: 'dark' },
     ];
 
-    const changeForcastUnit = (event) => {
-
-        setRadioValue(event.currentTarget.value);
+    const changeTheme = (event) => {
 
         dispatch({
             type: 'CHANGE',
             payload: event.currentTarget.value
         })
+
+        setRadioValue(event.currentTarget.value);
     }
 
     return (
@@ -32,11 +32,11 @@ export default function ThemeToggle() {
                     key={index}
                     id={`radio-theme-${index}`}
                     type="radio"
-                    variant={unit.value === "L" ? 'outline-success' : 'outline-danger'}
+                    variant={unit.value === "light" ? 'outline-success' : 'outline-danger'}
                     name="radio-theme"
                     value={unit.value}
                     checked={radioValue === unit.value}
-                    onChange={(e) => changeForcastUnit(e)}
+                    onChange={(e) => changeTheme(e)}
                 >
                     {unit.name}
                 </ToggleButton>

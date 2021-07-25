@@ -17,12 +17,12 @@ export default function TempUnitToggle() {
 
     const changeForcastUnit = (event) => {
 
-        setRadioValue(event.currentTarget.value);
-
         dispatch({
             type: 'UPDATE',
             payload: event.currentTarget.value
         })
+
+        setRadioValue(event.currentTarget.value);
     }
 
     return (
@@ -32,7 +32,7 @@ export default function TempUnitToggle() {
                     key={index}
                     id={`radio-${index}`}
                     type="radio"
-                    variant={unit.value === "F" ? 'outline-success' : 'outline-danger'}
+                    variant={unit.value === "C" ? 'outline-success' : 'outline-danger'}
                     name="radio"
                     value={unit.value}
                     checked={radioValue === unit.value}

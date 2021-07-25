@@ -7,8 +7,9 @@ import { useSelector } from 'react-redux';
 
 export default function LocationCardDetailed({ weatherData, handleFavorite }) {
 
-    const temperature_unit = useSelector(state => state.forcastUnit) || 'C';
-    const themeColor = useSelector(state => state.themeColor) || 'L';
+    const temperature_unit = useSelector(state => state.forcastUnit);
+    const themeColor = useSelector(state => state.themeColor);
+
 
     if (weatherData === undefined)
         return null;
@@ -29,8 +30,8 @@ export default function LocationCardDetailed({ weatherData, handleFavorite }) {
 
     return (
         <Card
-            bg={themeColor === 'L' ? 'light' : 'dark'}
-            text={themeColor === 'L' ? 'dark' : 'light'}
+            bg={themeColor}
+            text={themeColor === 'light' ? 'dark' : 'light'}
         >
             <Card.Body>
                 <h1>{weatherData.name}</h1>

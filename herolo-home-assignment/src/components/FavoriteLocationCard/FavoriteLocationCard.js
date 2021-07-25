@@ -4,8 +4,8 @@ import { Link } from 'react-router-dom';
 
 export default function FavoriteLocationCard({ weatherData }) {
 
-    const temperature_unit = useSelector(state => state.forcastUnit) || 'C';
-    const themeColor = useSelector(state => state.themeColor) || 'L';
+    const temperature_unit = useSelector(state => state.forcastUnit);
+    const themeColor = useSelector(state => state.themeColor);
 
     const current_temp_by_unit = temperature_unit === 'C' ? weatherData.temperature_c : weatherData.temperature_f;
 
@@ -13,8 +13,8 @@ export default function FavoriteLocationCard({ weatherData }) {
         <>
             <Link to={`/location/${weatherData.id}`} style={{ textDecoration: 'none' }}>
                 <Card
-                    bg={themeColor === 'L' ? 'light' : 'dark'}
-                    text={themeColor === 'L' ? 'dark' : 'light'}
+                    bg={themeColor}
+                    text={themeColor === 'light' ? 'dark' : 'light'}
                 >
                     <Card.Header>
                         <h2>{weatherData.name}</h2>

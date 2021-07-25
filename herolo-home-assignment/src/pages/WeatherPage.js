@@ -8,7 +8,7 @@ import { useParams } from "react-router-dom";
 
 export default function WeatherPage() {
 
-    const apikey = "jAUHhIAVLMxLBE6EzBKEY5B8gQ5gQgsn";
+    const apikey = "0zwcxsiiWksGhoR0QoQg1yd5KExpmxv8";
     const accuweather_url = "http://dataservice.accuweather.com";
 
     const params = useParams();
@@ -62,7 +62,7 @@ export default function WeatherPage() {
 
     const getFiveDaysForcasts = async (cityKey, temperatureUnit) => {
 
-        let metric = temperatureUnit === 'C';
+        let metric = temperatureUnit === 'celsius';
         const res = await fetch(`${accuweather_url}/forecasts/v1/daily/5day/${cityKey}?apikey=${apikey}&metric=${metric}`);
         return await res.json();
     }
@@ -97,8 +97,8 @@ export default function WeatherPage() {
             const city = await getCity(cityName);
             const cityKey = city[0].Key;
             const currentWeather = await getCurrentWeather(cityKey);
-            const fiveDaysDailyForcasts_C = await getFiveDaysForcasts(cityKey, 'C');
-            const fiveDaysDailyForcasts_F = await getFiveDaysForcasts(cityKey, 'F');
+            const fiveDaysDailyForcasts_C = await getFiveDaysForcasts(cityKey, 'celsius');
+            const fiveDaysDailyForcasts_F = await getFiveDaysForcasts(cityKey, 'fahrenheit');
 
             setCurrentLocationData({
                 id: city[0].Key,
