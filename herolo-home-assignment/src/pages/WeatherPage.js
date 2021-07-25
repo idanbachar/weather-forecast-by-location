@@ -8,7 +8,7 @@ import { useParams } from "react-router-dom";
 
 export default function WeatherPage() {
 
-    const apikey = "p2fWGa1zwDwGDvVfIQl383p0Joc33tQL";
+    const apikey = "SGalJ8Wja99M5WXvMNCnegGJlGiY0GNL";
     const accuweather_url = "http://dataservice.accuweather.com";
 
     const params = useParams();
@@ -49,8 +49,10 @@ export default function WeatherPage() {
         return await res.json();
     }
 
-    const getFiveDaysForcasts = async (cityKey) => {
-        const res = await fetch(`${accuweather_url}/forecasts/v1/daily/5day/${cityKey}?apikey=${apikey}&metric=true`);
+    const getFiveDaysForcasts = async (cityKey, temperatureUnit) => {
+
+        let metric = temperatureUnit === 'C';
+        const res = await fetch(`${accuweather_url}/forecasts/v1/daily/5day/${cityKey}?apikey=${apikey}&metric=${metric}`);
         return await res.json();
     }
 
@@ -60,13 +62,15 @@ export default function WeatherPage() {
             const city = await getCity();
             const cityKey = city[0].Key;
             const currentWeather = await getCurrentWeather(cityKey);
-            const fiveDaysDailyForcasts = await getFiveDaysForcasts(cityKey);
+            const fiveDaysDailyForcasts_C = await getFiveDaysForcasts(cityKey, 'C');
+            const fiveDaysDailyForcasts_F = await getFiveDaysForcasts(cityKey, 'F');
 
             setCurrentLocationData({
                 id: city[0].Key,
                 name: city[0].LocalizedName,
                 weather_text: currentWeather[0].WeatherText,
-                five_days_daily_forcasts: fiveDaysDailyForcasts.DailyForecasts,
+                five_days_daily_forcasts_c: fiveDaysDailyForcasts_C.DailyForecasts,
+                five_days_daily_forcasts_f: fiveDaysDailyForcasts_F.DailyForecasts,
                 date: currentWeather[0].LocalObservationDateTime,
                 temperature_c: currentWeather[0].Temperature.Metric.Value,
                 temperature_f: currentWeather[0].Temperature.Imperial.Value,

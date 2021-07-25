@@ -7,10 +7,7 @@ export default function ForcastCard({ date, temperature }) {
             <Card.Body>
                 <Card.Title>{new Date(date).toDateString()}</Card.Title>
                 <Card.Text>
-                    Minimum: {temperature.Minimum.Value} {temperature.Maximum.Unit}
-                </Card.Text>
-                <Card.Text>
-                    Maximum {temperature.Maximum.Value} {temperature.Maximum.Unit}
+                    {Math.round(temperature.Maximum.Value)} {temperature.Maximum.Unit}
                 </Card.Text>
             </Card.Body>
         </Card>

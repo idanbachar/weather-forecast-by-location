@@ -1,7 +1,15 @@
 import Card from 'react-bootstrap/Card';
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 export default function FavoriteLocationCard({ weatherData }) {
+
+    const temperature_unit = useSelector(state => state.forcastUnit) || 'C';
+
+    const current_temp_by_unit = temperature_unit === 'C' ?
+        weatherData.temperature_c :
+        weatherData.temperature_f
+
     return (
         <>
             <Link to={`/location/${weatherData.id}`} style={{ textDecoration: 'none' }}>
@@ -15,7 +23,7 @@ export default function FavoriteLocationCard({ weatherData }) {
                             {weatherData.weather_text}
                         </Card.Text>
                         <Card.Text>
-                            {weatherData.temperature_c} C
+                            {Math.round(current_temp_by_unit)}°{temperature_unit}
                         </Card.Text>
                     </Card.Body>
                 </Card>
