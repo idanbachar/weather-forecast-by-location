@@ -8,17 +8,19 @@ import { useParams } from "react-router-dom";
 
 export default function WeatherPage() {
 
-    const apikey = "SGalJ8Wja99M5WXvMNCnegGJlGiY0GNL";
+    const apikey = "jAUHhIAVLMxLBE6EzBKEY5B8gQ5gQgsn";
     const accuweather_url = "http://dataservice.accuweather.com";
 
     const params = useParams();
     const dispatch = useDispatch();
     const favorites = useSelector(state => state.favoriteLocations);
 
-    const [citySearch, setCitySearch] = useState('Tel Aviv');
+    const [citySearch, setCitySearch] = useState('');
     const [currentLocationData, setCurrentLocationData] = useState();
 
     useEffect(() => {
+
+
         if (favorites.length > 0) {
 
             if (params.locationId) {
@@ -39,8 +41,17 @@ export default function WeatherPage() {
 
     }, [currentLocationData])
 
-    const getCity = async () => {
-        const res = await fetch(`${accuweather_url}/locations/v1/cities/autocomplete?apikey=${apikey}&q=${citySearch}`);
+    useEffect(() => {
+        getGeoLocation();
+    }, [])
+
+    const getGeoPosition = async (coordinates) => {
+        const res = await fetch(`${accuweather_url}/locations/v1/cities/geoposition/search?apikey=${apikey}&q=${coordinates.latitude},${coordinates.longitude}`);
+        return await res.json();
+    }
+
+    const getCity = async (city = undefined) => {
+        const res = await fetch(`${accuweather_url}/locations/v1/cities/autocomplete?apikey=${apikey}&q=${city === undefined ? citySearch : city}`);
         return await res.json();
     }
 
@@ -56,10 +67,34 @@ export default function WeatherPage() {
         return await res.json();
     }
 
-    const getLocationWeather = async () => {
+    const getGeoLocation = () => {
+
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(setGeoLocationCoordinates);
+
+        } else {
+            alert("Geolocation is not supported by this browser.");
+            setCitySearch("Tel Aviv");
+        }
+    }
+
+    async function setGeoLocationCoordinates(position) {
+
+        const coordinates = {
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude
+        }
+
+        const data = await getGeoPosition(coordinates);
+        const myCityName = data.LocalizedName;
+        setCitySearch(myCityName);
+        getLocationWeather(myCityName);
+    }
+
+    const getLocationWeather = async (cityName) => {
 
         try {
-            const city = await getCity();
+            const city = await getCity(cityName);
             const cityKey = city[0].Key;
             const currentWeather = await getCurrentWeather(cityKey);
             const fiveDaysDailyForcasts_C = await getFiveDaysForcasts(cityKey, 'C');
@@ -122,7 +157,7 @@ export default function WeatherPage() {
                 />
                 <Button
                     variant="outline-secondary"
-                    onClick={getLocationWeather}
+                    onClick={() => getLocationWeather(citySearch)}
                 >
                     Search
                 </Button>
