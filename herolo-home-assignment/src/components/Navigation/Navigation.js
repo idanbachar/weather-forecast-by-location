@@ -1,8 +1,6 @@
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import Container from 'react-bootstrap/Container';
-import TempUnitToggle from '../TempUnitToggle/TempUnitToggle';
-import ThemeToggle from '../ThemeToggle/ThemeToggle';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
@@ -17,13 +15,11 @@ export default function Navigation({ title, links }) {
                 <Navbar.Brand>{title}</Navbar.Brand>
                 <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                 <Navbar.Collapse id="responsive-navbar-nav">
-                    <Nav className="me-auto">
-                        <TempUnitToggle />
-                        <ThemeToggle />
-                    </Nav>
+                    <Nav className="me-auto" />
                     <Nav>
                         {links.map((link, index) =>
                             <Link
+                                key={index}
                                 className="nav-link"
                                 to={link.to}
                             >

@@ -15,6 +15,7 @@ export default function FavoriteLocationCard({ weatherData }) {
                 <Card
                     bg={themeColor}
                     text={themeColor === 'light' ? 'dark' : 'light'}
+                    className="text-center"
                 >
                     <Card.Header>
                         <h2>{weatherData.name}</h2>

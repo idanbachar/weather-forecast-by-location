@@ -10,7 +10,6 @@ export default function LocationCardDetailed({ weatherData, handleFavorite }) {
     const temperature_unit = useSelector(state => state.forcastUnit);
     const themeColor = useSelector(state => state.themeColor);
 
-
     if (weatherData === undefined)
         return null;
 
@@ -32,14 +31,21 @@ export default function LocationCardDetailed({ weatherData, handleFavorite }) {
         <Card
             bg={themeColor}
             text={themeColor === 'light' ? 'dark' : 'light'}
+
         >
-            <Card.Body>
-                <h1>{weatherData.name}</h1>
-                <h2>{Math.round(current_temp_by_unit)}°{temperature_unit}</h2>
-                <h1>{weatherData.weather_text}</h1>
-                <Card.Text>
+            <Card.Body >
+                <div style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                }}>
+                    <h1>
+                        {weatherData.name},
+                        <br />
+                        {Math.round(current_temp_by_unit)}°{temperature_unit}
+                    </h1>
                     <FavoriteButton />
-                </Card.Text>
+                </div>
+                <h1 className="text-center">{weatherData.weather_text}</h1>
                 <Row xs={1} md={5} className="g-5">
                     {forcasts_by_unit.map((forcast, index) => (
                         <Col key={index}>

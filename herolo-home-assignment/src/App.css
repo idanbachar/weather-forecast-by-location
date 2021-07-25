@@ -1,6 +1,4 @@
-.App {
-  text-align: center;
-}
+.App {}
 
 .App-header {
   background-color: #282c34;
@@ -21,5 +19,3 @@
 .inactive:hover {
   color: #fed136;
 }
-
- 

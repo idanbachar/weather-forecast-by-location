@@ -11,8 +11,8 @@ export default function TempUnitToggle() {
     const [radioValue, setRadioValue] = useState('C');
 
     const units = [
-        { name: 'Celsius', value: 'C' },
-        { name: 'Fahrenheit', value: 'F' },
+        { name: '°C', value: 'C' },
+        { name: '°F', value: 'F' },
     ];
 
     const changeForcastUnit = (event) => {
