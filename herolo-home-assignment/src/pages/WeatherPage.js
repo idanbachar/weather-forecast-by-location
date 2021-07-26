@@ -40,14 +40,30 @@ export default function WeatherPage() {
             getGeoLocation();
     }, [])
 
-    const getGeoLocation = () => {
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(setGeoLocationCoordinates);
-
-        } else {
-            alert("Geolocation is not supported by this browser.");
-            setCitySearch("Tel Aviv");
+    async function showGeoLocationError(error) {
+        switch (error.code) {
+            case error.PERMISSION_DENIED:
+                handleErrorMessage("User denied the request for Geolocation. Tel Aviv set to default.");
+                const defaultCity = "Tel Aviv";
+                setCitySearch(defaultCity);
+                await getLocationWeatherByCity(defaultCity);
+                break;
+            case error.POSITION_UNAVAILABLE:
+                handleErrorMessage("Location information is unavailable.");
+                break;
+            case error.TIMEOUT:
+                handleErrorMessage("The request to get user location timed out.");
+                break;
+            case error.UNKNOWN_ERROR:
+                handleErrorMessage("An unknown error occurred.");
+                break;
+            default: break;
         }
+    }
+
+    const getGeoLocation = () => {
+        if (navigator.geolocation)
+            navigator.geolocation.getCurrentPosition(setGeoLocationCoordinates, showGeoLocationError);
     }
 
     async function setGeoLocationCoordinates(position) {
