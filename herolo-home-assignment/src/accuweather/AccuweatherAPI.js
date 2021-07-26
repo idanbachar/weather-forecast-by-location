@@ -1,4 +1,4 @@
-const apikey = "x8TKUnGnzcCUCMxZDgoqVsEfAOboxbzE";
+const apikey = "cpPSNc4Z3dF9kMPodQ6K2C8y97jN4pBM";
 const accuweather_url = "http://dataservice.accuweather.com";
 
 export async function getGeoPosition(coordinates) {

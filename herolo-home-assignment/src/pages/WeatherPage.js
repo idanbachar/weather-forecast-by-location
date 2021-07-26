@@ -6,6 +6,7 @@ import LocationCardDetailed from "../components/LocationCardDetailed/LocationCar
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { getGeoPosition, getCity, getCurrentWeather, getFiveDaysForcasts } from "../accuweather/AccuweatherAPI";
+import Toast from 'react-bootstrap/Toast'
 
 export default function WeatherPage() {
 
@@ -15,6 +16,8 @@ export default function WeatherPage() {
     const favorites = useSelector(state => state.favoriteLocations);
     const [citySearch, setCitySearch] = useState('');
     const [currentLocationData, setCurrentLocationData] = useState();
+    const [fetchError, setFetchError] = useState();
+    const [show, setShow] = useState(false);
 
     useEffect(() => {
         if (params.locationId) {
@@ -50,10 +53,14 @@ export default function WeatherPage() {
             longitude: position.coords.longitude
         }
 
-        const data = await getGeoPosition(coordinates);
-        const myCityName = data.LocalizedName;
-        setCitySearch(myCityName);
-        getLocationWeatherByCity(myCityName);
+        try {
+            const data = await getGeoPosition(coordinates);
+            const myCityName = data.LocalizedName;
+            setCitySearch(myCityName);
+            await getLocationWeatherByCity(myCityName);
+        } catch (error) {
+            handleErrorMessage(error.message);
+        }
     }
 
     const getLocationWeatherByCity = async (cityName) => {
@@ -78,8 +85,23 @@ export default function WeatherPage() {
             });
         }
         catch (error) {
-            alert(error);
+            handleErrorMessage(error.message);
         }
+    }
+
+    const handleErrorMessage = (errorMessage) => {
+        switch (errorMessage) {
+            case "Failed to fetch":
+                errorMessage = "Cannot fetch data from api. Probably, the api key is max used."
+                break;
+            case "Cannot read property 'Key' of undefined":
+                errorMessage = "City entered is not valid. Please try again.";
+                break;
+            default: break;
+        }
+
+        setFetchError(errorMessage);
+        setShow(true);
     }
 
     const handleFavorite = (type) => {
@@ -106,10 +128,19 @@ export default function WeatherPage() {
         setCurrentLocationData(updated);
     }
 
+    const validateSearchField = async (cityName) => {
+        const allowedLetters = /^[a-zA-Z\s]*$/;
+        if (cityName.match(allowedLetters))
+            await getLocationWeatherByCity(cityName);
+        else
+            handleErrorMessage("Only english letters allowed.")
+    }
+
     return (
         <div className="container">
             <h3>City Weather</h3>
             <hr />
+
             <InputGroup className="mb-3">
                 <FormControl
                     aria-label="Search City"
@@ -119,11 +150,20 @@ export default function WeatherPage() {
                 />
                 <Button
                     variant="outline-secondary"
-                    onClick={() => getLocationWeatherByCity(citySearch)}
+                    onClick={() => validateSearchField(citySearch)}
                 >
                     Search
                 </Button>
             </InputGroup>
+
+            <Toast onClose={() => setShow(false)} show={show} delay={6000} autohide>
+                <Toast.Header>
+                    <strong className="me-auto">Error</strong>
+                    <small>Now</small>
+                </Toast.Header>
+                <Toast.Body>{fetchError}</Toast.Body>
+            </Toast>
+            <hr style={{ visibility: 'hidden' }} />
             <LocationCardDetailed
                 weatherData={currentLocationData}
                 handleFavorite={handleFavorite}
