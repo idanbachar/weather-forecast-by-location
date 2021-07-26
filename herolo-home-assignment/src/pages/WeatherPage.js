@@ -1,14 +1,17 @@
 import { useEffect, useState } from "react"
+import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
 import InputGroup from 'react-bootstrap/InputGroup';
 import FormControl from 'react-bootstrap/FormControl';
 import Button from 'react-bootstrap/Button';
-import LocationCardDetailed from "../components/LocationCardDetailed/LocationCardDetailed";
-import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
-import { getGeoPosition, getCity, getCurrentWeather, getFiveDaysForcasts } from "../accuweather/AccuweatherAPI";
 import Toast from 'react-bootstrap/Toast'
+import ToastContainer from 'react-bootstrap/ToastContainer'
+import LocationCardDetailed from "../components/LocationCardDetailed/LocationCardDetailed";
+import { getGeoPosition, getCity, getCurrentWeather, getFiveDaysForcasts } from "../accuweather/AccuweatherAPI";
 
 export default function WeatherPage() {
+
+    const themeColor = useSelector(state => state.themeColor);
 
     const params = useParams();
     const dispatch = useDispatch();
@@ -155,14 +158,20 @@ export default function WeatherPage() {
                     Search
                 </Button>
             </InputGroup>
-
-            <Toast onClose={() => setShow(false)} show={show} delay={6000} autohide>
-                <Toast.Header>
-                    <strong className="me-auto">Error</strong>
-                    <small>Now</small>
-                </Toast.Header>
-                <Toast.Body>{fetchError}</Toast.Body>
-            </Toast>
+            <ToastContainer>
+                <Toast
+                    onClose={() => setShow(false)}
+                    show={show}
+                    delay={4000} autohide
+                    bg={themeColor}
+                >
+                    <Toast.Header>
+                        <strong className="me-auto">Error</strong>
+                        <small>Now</small>
+                    </Toast.Header>
+                    <Toast.Body className={themeColor === 'dark' && 'text-white'}>{fetchError}</Toast.Body>
+                </Toast>
+            </ToastContainer>
             <hr style={{ visibility: 'hidden' }} />
             <LocationCardDetailed
                 weatherData={currentLocationData}
