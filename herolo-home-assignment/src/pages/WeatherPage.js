@@ -18,24 +18,17 @@ export default function WeatherPage() {
     const [currentLocationData, setCurrentLocationData] = useState();
 
     useEffect(() => {
-        if (favorites.length > 0) {
-            if (params.locationId) {
-                const locationWeather = favorites.find(fav => fav.id === params.locationId);
-                if (locationWeather) {
+        if (params.locationId) {
+            const locationWeather = favorites.find(fav => fav.id === params.locationId);
+            if (locationWeather) {
+                if (params.locationId === locationWeather.id) {
                     setCitySearch(locationWeather.name);
                     setCurrentLocationData(locationWeather);
                 }
             }
-            else {
-                if (currentLocationData) {
-                    const locationWeather = favorites.find(fav => fav.id === currentLocationData.id);
-                    if (locationWeather)
-                        setCurrentLocationData(locationWeather);
-                }
-            }
         }
 
-    }, [currentLocationData])
+    }, [params])
 
     useEffect(() => {
         if (!params.locationId)
@@ -92,6 +85,7 @@ export default function WeatherPage() {
             const currentWeather = await getCurrentWeather(cityKey);
             const fiveDaysDailyForcasts_C = await getFiveDaysForcasts(cityKey, 'celsius');
             const fiveDaysDailyForcasts_F = await getFiveDaysForcasts(cityKey, 'fahrenheit');
+            const isFavorited = favorites.find(fav => fav.id === cityKey);
 
             setCurrentLocationData({
                 id: city[0].Key,
@@ -102,7 +96,7 @@ export default function WeatherPage() {
                 date: currentWeather[0].LocalObservationDateTime,
                 temperature_c: currentWeather[0].Temperature.Metric.Value,
                 temperature_f: currentWeather[0].Temperature.Imperial.Value,
-                isFavorite: false
+                isFavorite: isFavorited === undefined ? false : true
             });
         }
         catch (error) {
