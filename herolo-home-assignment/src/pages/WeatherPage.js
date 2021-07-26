@@ -5,10 +5,9 @@ import Button from 'react-bootstrap/Button';
 import LocationCardDetailed from "../components/LocationCardDetailed/LocationCardDetailed";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
+import { getGeoPosition, getCity, getCurrentWeather, getFiveDaysForcasts } from "../accuweather/AccuweatherAPI";
 
 export default function WeatherPage() {
-    const apikey = "7sJxCOLJ7M2WJrWk3gBy9IOs2kAN8Gdf";
-    const accuweather_url = "http://dataservice.accuweather.com";
 
     const params = useParams();
     const dispatch = useDispatch();
@@ -35,27 +34,6 @@ export default function WeatherPage() {
             getGeoLocation();
     }, [])
 
-    const getGeoPosition = async (coordinates) => {
-        const res = await fetch(`${accuweather_url}/locations/v1/cities/geoposition/search?apikey=${apikey}&q=${coordinates.latitude},${coordinates.longitude}`);
-        return await res.json();
-    }
-
-    const getCity = async (city = undefined) => {
-        const res = await fetch(`${accuweather_url}/locations/v1/cities/autocomplete?apikey=${apikey}&q=${city === undefined ? citySearch : city}`);
-        return await res.json();
-    }
-
-    const getCurrentWeather = async (cityKey) => {
-        const res = await fetch(`${accuweather_url}/currentconditions/v1/${cityKey}?apikey=${apikey}`);
-        return await res.json();
-    }
-
-    const getFiveDaysForcasts = async (cityKey, temperatureUnit) => {
-        let metric = temperatureUnit === 'celsius';
-        const res = await fetch(`${accuweather_url}/forecasts/v1/daily/5day/${cityKey}?apikey=${apikey}&metric=${metric}`);
-        return await res.json();
-    }
-
     const getGeoLocation = () => {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(setGeoLocationCoordinates);
@@ -75,10 +53,10 @@ export default function WeatherPage() {
         const data = await getGeoPosition(coordinates);
         const myCityName = data.LocalizedName;
         setCitySearch(myCityName);
-        getLocationWeather(myCityName);
+        getLocationWeatherByCity(myCityName);
     }
 
-    const getLocationWeather = async (cityName) => {
+    const getLocationWeatherByCity = async (cityName) => {
         try {
             const city = await getCity(cityName);
             const cityKey = city[0].Key;
@@ -141,7 +119,7 @@ export default function WeatherPage() {
                 />
                 <Button
                     variant="outline-secondary"
-                    onClick={() => getLocationWeather(citySearch)}
+                    onClick={() => getLocationWeatherByCity(citySearch)}
                 >
                     Search
                 </Button>
