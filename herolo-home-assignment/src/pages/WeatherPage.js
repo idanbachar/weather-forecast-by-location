@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 
 export default function WeatherPage() {
-    const apikey = "OANaWZsJN5vVD3hoazGRaaG35oASnNGQ";
+    const apikey = "7sJxCOLJ7M2WJrWk3gBy9IOs2kAN8Gdf";
     const accuweather_url = "http://dataservice.accuweather.com";
 
     const params = useParams();
@@ -38,7 +38,8 @@ export default function WeatherPage() {
     }, [currentLocationData])
 
     useEffect(() => {
-        getGeoLocation();
+        if (!params.locationId)
+            getGeoLocation();
     }, [])
 
     const getGeoPosition = async (coordinates) => {
