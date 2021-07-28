@@ -1,5 +1,5 @@
 const apikey = "k3RTYuLgWoGwEuJGkjENKA5nbTYqWsHJ";
-const accuweather_url = "http://dataservice.accuweather.com";
+const accuweather_url = "https://dataservice.accuweather.com";
 
 export async function getGeoPosition(coordinates) {
     const res = await fetch(`${accuweather_url}/locations/v1/cities/geoposition/search?apikey=${apikey}&q=${coordinates.latitude},${coordinates.longitude}`);
