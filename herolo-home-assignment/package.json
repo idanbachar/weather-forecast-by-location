@@ -1,7 +1,7 @@
 {
   "name": "herolo-home-assignment",
   "version": "0.1.0",
-  "homepage": "https://idanbachar.github.io/Idan-Bachar-24-07-2021",
+  "homepage": "http://idanbachar.github.io/Idan-Bachar-24-07-2021",
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^5.14.1",
