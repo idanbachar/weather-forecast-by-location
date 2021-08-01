@@ -7,7 +7,7 @@ import TempUnitToggle from './components/TempUnitToggle/TempUnitToggle';
 import ThemeToggle from './components/ThemeToggle/ThemeToggle';
 
 function App() {
-  const title = "Herolo Weather Task";
+  const title = "Weather Forecast By Location";
 
   const navLinks = [
     { label: "Home", to: "/" },
